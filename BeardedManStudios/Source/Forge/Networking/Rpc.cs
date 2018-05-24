@@ -74,13 +74,13 @@ namespace BeardedManStudios.Forge.Networking
 					argTypes += arguments[i].GetType();
 				}
 
-				throw new BaseNetworkException("There are " + arguments.Length + " supplied arguments, but this Rpc expects " + argumentTypes.Length + ". Args: " + argTypes);
+				throw new BaseNetworkException($"There are {arguments.Length} supplied arguments, but this Rpc expects {argumentTypes.Length}. Args: {argTypes}");
 			}
 
 			for (int i = 0; i < arguments.Length; i++)
 			{
 				if (arguments[i].GetType() != argumentTypes[i])
-					throw new BaseNetworkException("The argument with index " + i + " was expected to be a " + argumentTypes[i] + " but got " + arguments[i].GetType() + " instead");
+					throw new BaseNetworkException($"The argument with index {i} was expected to be a {argumentTypes[i]} but got {arguments[i].GetType()} instead");
 			}
 		}
 	}

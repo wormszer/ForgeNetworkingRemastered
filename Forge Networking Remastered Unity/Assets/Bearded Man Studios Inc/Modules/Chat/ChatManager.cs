@@ -36,7 +36,7 @@ public class ChatManager : ChatManagerBehavior
 			label = (Instantiate(messageLabel, contentTransform) as GameObject).GetComponent<Text>();
 
 		messageLabels.Add(label);
-		label.text = username + ": " + message;
+		label.text = $"{username}: {message}";
 	}
 
 	public void SendMessage()

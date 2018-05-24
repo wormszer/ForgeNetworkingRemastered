@@ -75,7 +75,7 @@ namespace ConsoleTestProgram
             if ((0x1 & readFlags[0]) != 0)
                 num = data.GetBasicType<int>();
 
-            Console.WriteLine("Read data and num is now " + Num);
+            Console.WriteLine($"Read data and num is now {Num}");
         }
 
         public ConsoleNetworkObject(NetWorker networker) : base(networker) { }

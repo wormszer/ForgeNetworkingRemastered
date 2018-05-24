@@ -65,7 +65,7 @@ public class MultiplayerMenu : MonoBehaviour
 
 	private void LocalServerLocated(NetWorker.BroadcastEndpoints endpoint, NetWorker sender)
 	{
-		Debug.Log("Found endpoint: " + endpoint.Address + ":" + endpoint.Port);
+		Debug.Log($"Found endpoint: {endpoint.Address}:{endpoint.Port}");
 	}
 
 	public void Connect()
@@ -78,8 +78,8 @@ public class MultiplayerMenu : MonoBehaviour
 		ushort port;
 		if(!ushort.TryParse(portNumber.text, out port))
 		{
-			Debug.LogError("The supplied port number is not within the allowed range 0-" + ushort.MaxValue);
-		    	return;
+			Debug.LogError($"The supplied port number is not within the allowed range 0-{ushort.MaxValue}");
+				return;
 		}
 
 		NetWorker client;
@@ -152,7 +152,7 @@ public class MultiplayerMenu : MonoBehaviour
 
 		server.playerTimeout += (player, sender) =>
 		{
-			Debug.Log("Player " + player.NetworkId + " timed out");
+			Debug.Log($"Player {player.NetworkId} timed out");
 		};
 		//LobbyService.Instance.Initialize(server);
 
@@ -175,7 +175,7 @@ public class MultiplayerMenu : MonoBehaviour
 
 	private void TestLocalServerFind(NetWorker.BroadcastEndpoints endpoint, NetWorker sender)
 	{
-		Debug.Log("Address: " + endpoint.Address + ", Port: " + endpoint.Port + ", Server? " + endpoint.IsServer);
+		Debug.Log($"Address: {endpoint.Address}, Port: {endpoint.Port}, Server? {endpoint.IsServer}");
 	}
 
 	public void Connected(NetWorker networker)

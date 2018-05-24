@@ -13,7 +13,7 @@ namespace BeardedManStudios.Forge.MVCWebServer
         public string GetVariable(string key)
         {
             if (!variables.ContainsKey(key))
-                throw new ForgeWebServerException("The requested variable " + key + " was not found in the controller");
+                throw new ForgeWebServerException($"The requested variable{key} was not found in the controller");
 
             return variables[key]();
         }

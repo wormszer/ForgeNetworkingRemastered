@@ -19,7 +19,7 @@ namespace UnitTests.UDP
 
 			server = new UDPServer(32);
 			server.Connect(port: currentPort);
-			Console.WriteLine("Using port number: " + currentPort);
+			Console.WriteLine($"Using port number: {currentPort}");
 		}
 
 		[ClassCleanup]
@@ -34,8 +34,9 @@ namespace UnitTests.UDP
 		{
 			client = new UDPClient();
 
-			Console.WriteLine("Using port number: " + currentPort);
-			client.Connect("127.0.0.1", currentPort);
+			Console.WriteLine($"Using port number: {currentPort}");
+
+            client.Connect("127.0.0.1", currentPort);
 			Assert.IsTrue(client.IsBound);
 			WaitFor(() => { return client.IsConnected; });
 

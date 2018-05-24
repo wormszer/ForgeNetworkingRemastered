@@ -116,7 +116,7 @@ namespace ConsoleTestProgram
 				else if (message.StartsWith("set num to "))
 					obj.networkObject.Num = int.Parse(message.Substring("set name to ".Length));
 				else if (message == "num")
-					Console.WriteLine("Number is currently " + obj.networkObject.Num);
+					Console.WriteLine($"Number is currently {obj.networkObject.Num}");
 				else
 				{
 					if (networkHandle is TCPServer)
@@ -133,7 +133,7 @@ namespace ConsoleTestProgram
 		private static void ReadTextMessage(NetworkingPlayer player, Text frame, NetWorker sender)
 		{
 			Console.WriteLine("");
-			Console.WriteLine("Read: " + frame.ToString());
+			Console.WriteLine($"Read: {frame.ToString()}");
 			Console.Write("Enter a message: ");
 		}
 

@@ -50,16 +50,16 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
             {
                 foreach (HelpInfo help in method.GetCustomAttributes(typeof(HelpInfo), true))
                 {
-                    data += "<br /><br /><strong>" + method.Name + "</strong>: " + help.ToString();
+                    data += $"<br /><br /><strong>{method.Name}</strong>: {help.ToString()}";
                 }
             }
 
             foreach (var kv in Webserver.Plugins)
             {
-                data += "<br /><br /><strong>" + kv.Key + "</strong>: " + kv.Value.help.ToString();
+                data += $"<br /><br /><strong>{kv.Key}</strong>: {kv.Value.help.ToString()}";
             }
 
-            AddData("Help" + data);
+            AddData($"Help {data}");
 
             return Render();
         }
@@ -68,7 +68,7 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
         [HelpInfo("Shows the current player count", null, "playerCount")]
         public string PlayerCount(params string[] args)
         {
-            AddData("There are currently " + Networker.Players.Count + " players online");
+            AddData($"There are currently {Networker.Players.Count} players online");
             return Render();
         }
 
@@ -82,7 +82,7 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
                 return Error("An id is required to process this command");
 
             if (!ulong.TryParse(args[0], out playerId))
-                return Error("The id " + args[0] + " is an invalid player id");
+                return Error($"The id {args[0]} is an invalid player id");
 
             if (args.Length > 1)
                 reason = args[1];
@@ -93,11 +93,11 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
 
                 ((IServer)Networker).Disconnect(player, true);
 
-                AddData("You have kicked player with id " + playerId + " has been kicked");
+                AddData($"You have kicked player with id {playerId} has been kicked");
             }
             catch
             {
-                return Error("The player with the id of " + playerId + " was not found");
+                return Error($"The player with the id of {playerId} was not found");
             }
 
             return Render();
@@ -106,7 +106,7 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
         [HelpInfo("Shows the time since the server started as well as the current machine time", null, "time")]
         public string Time(params string[] args)
         {
-            AddData("Since start (" + Networker.Time.Timestep + ") date time (" + DateTime.Now.ToString() + ") UTC (" + DateTime.UtcNow.ToString() + ")");
+            AddData($"Since start ({Networker.Time.Timestep}) date time ({DateTime.Now.ToString()}) UTC ({DateTime.UtcNow.ToString()})");
             return Render();
         }
 
@@ -118,20 +118,20 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
 
             ulong playerId = 0;
             if (!ulong.TryParse(args[0], out playerId))
-                return Error("The id " + args[0] + " is an invalid player id");
+                return Error($"The id {args[0]} is an invalid player id");
 
             int minutes = 0;
             if (!int.TryParse(args[1], out minutes))
-                return Error("An invalid minute amount (" + args[1] + ") was input");
+                return Error($"An invalid minute amount ({args[1]}) was input");
 
             try
             {
                 ((IServer)Networker).BanPlayer(playerId, minutes);
-                AddData("You have banned the player with id " + playerId + " for " + minutes + " minutes");
+                AddData($"You have banned the player with id {playerId} for {minutes} minutes");
             }
             catch
             {
-                return Error("The player with the id of " + playerId + " was not found");
+                return Error($"The player with the id of {playerId} was not found");
             }
 
             return Render();
@@ -161,7 +161,7 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
         //        Networking.Instantiate(objectName, NetworkReceivers.All);
         //    });
 
-        //    AddData("Attempting to spawn the object named " + objectName);
+        //    AddData($"Attempting to spawn the object named {objectName}");
 
         //    return Render();
         //}
@@ -174,13 +174,13 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
 
         //    ulong objectId = 0;
         //    if (!ulong.TryParse(args[0], out objectId))
-        //        return Error("The specified id " + args[0] + " is not a valid network id");
+        //        return Error($"The specified id {args[0]} is not a valid network id");
 
         //    SimpleNetworkedMonoBehavior behavior = SimpleNetworkedMonoBehavior.Locate(objectId);
 
         //    Networking.Destroy(behavior);
 
-        //    AddData("The object with id " + behavior.NetworkedId + " has been destroyed");
+        //    AddData($"The object with id {behavior.NetworkedId} has been destroyed");
 
         //    return Render();
         //}
@@ -212,8 +212,8 @@ namespace BeardedManStudios.Forge.MVCWebServer.Controllers
             if (args.Length != 1)
                 return Error("There needs to be exactly 1 argument for this command");
 
-            Logging.BMSLog.Log("Echo " + args[0] + " from web server");
-            AddData("Echo " + args[0] + " from web server");
+            Logging.BMSLog.Log("Echo {args[0]} from web server");
+            AddData($"Echo {args[0]} from web server");
 
             return Render();
         }

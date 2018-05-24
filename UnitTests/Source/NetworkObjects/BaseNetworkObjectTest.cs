@@ -187,9 +187,9 @@ namespace UnitTests.NetworkObjects
 
 			public override void FuncBlank(RpcArgs args)
 			{
-				Console.WriteLine("Calling blank on " + (networkObject.IsServer ? "Server" : "Client"));
+				Console.WriteLine($"Calling blank on {(networkObject.IsServer ? "Server" : "Client")}");
 
-				calledBlank = true;
+                calledBlank = true;
 				countBlank++;
 				objectBlank = null;
 			}

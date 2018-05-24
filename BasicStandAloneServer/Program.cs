@@ -50,7 +50,7 @@ namespace BasicStandAloneServer
 
         private static void ReadTextFrame(NetworkingPlayer player, BeardedManStudios.Forge.Networking.Frame.Text frame, NetWorker sender)
         {
-            Console.WriteLine("Read: " + frame.ToString());
+            Console.WriteLine($"Read: {frame.ToString()}");
         }
     }
 }

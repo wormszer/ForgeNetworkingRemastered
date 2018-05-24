@@ -459,7 +459,7 @@ namespace BeardedManStudios.Forge.Networking
 
 				BMSByte createdByteData = ObjectMapper.BMSByte(serverId);
 
-				Binary createdFrame = new Binary(Networker.Time.Timestep, Networker is TCPClient, createdByteData, Receivers.Server, MessageGroupIds.GetId("NO_CREATED_" + NetworkId), Networker is BaseTCP, RouterIds.CREATED_OBJECT_ROUTER_ID);
+				Binary createdFrame = new Binary(Networker.Time.Timestep, Networker is TCPClient, createdByteData, Receivers.Server, MessageGroupIds.GetId($"NO_CREATED_{NetworkId}"), Networker is BaseTCP, RouterIds.CREATED_OBJECT_ROUTER_ID);
 
 				if (networker is UDPClient)
 					((UDPClient)networker).Send(createdFrame, true);
@@ -831,11 +831,11 @@ namespace BeardedManStudios.Forge.Networking
 		{
 			// Make sure that the method name string is unique and not already assigned
 			if (rpcLookup.ContainsKey(methodName))
-				throw new BaseNetworkException("The rpc " + methodName + " has already been registered");
+				throw new BaseNetworkException($"The rpc {methodName} has already been registered");
 
 			// Each network object is only allowed 255 registered RPC methods as the id is a byte
 			if (Rpcs.Count >= byte.MaxValue)
-				throw new BaseNetworkException("You are only allowed to register " + byte.MaxValue + " Rpc methods per network object");
+				throw new BaseNetworkException($"You are only allowed to register {byte.MaxValue} Rpc methods per network object");
 
 
 			// The id for this RPC is goign to be the next index in the dictionary
@@ -909,7 +909,7 @@ namespace BeardedManStudios.Forge.Networking
 			byte methodId = data.GetBasicType<byte>();
 
 			if (!Rpcs.ContainsKey(methodId))
-				throw new BaseNetworkException("The rpc " + methodId + " was not found on this network object");
+				throw new BaseNetworkException($"The rpc {methodId} was not found on this network object");
 
 			byte behaviorFlags = data.GetBasicType<byte>();
 
@@ -1288,7 +1288,7 @@ namespace BeardedManStudios.Forge.Networking
 		private void FinalizeSendRpc(BMSByte data, Receivers receivers, byte methodId, ulong timestep, bool reliable, NetworkingPlayer targetPlayer = null, NetworkingPlayer sender = null)
 		{
 			// Generate a binary frame with a router
-			Binary rpcFrame = new Binary(timestep, Networker is TCPClient, data, receivers, MessageGroupIds.GetId("NO_RPC_" + NetworkId + "_" + methodId), Networker is BaseTCP, RouterIds.RPC_ROUTER_ID);
+			Binary rpcFrame = new Binary(timestep, Networker is TCPClient, data, receivers, MessageGroupIds.GetId($"NO_RPC_{NetworkId}_{methodId}"), Networker is BaseTCP, RouterIds.RPC_ROUTER_ID);
 			rpcFrame.SetSender(sender);
 
 			if (targetPlayer != null && Networker is IServer)
@@ -1340,7 +1340,7 @@ namespace BeardedManStudios.Forge.Networking
 				sendBinaryData.Append(data);
 
 				// Generate a binary frame with a router
-				Binary frame = new Binary(Networker.Time.Timestep, Networker is TCPClient, sendBinaryData, receivers, MessageGroupIds.GetId("NO_BIN_DATA_" + NetworkId), Networker is BaseTCP, RouterIds.BINARY_DATA_ROUTER_ID);
+				Binary frame = new Binary(Networker.Time.Timestep, Networker is TCPClient, sendBinaryData, receivers, MessageGroupIds.GetId($"NO_BIN_DATA_{NetworkId}"), Networker is BaseTCP, RouterIds.BINARY_DATA_ROUTER_ID);
 
                 if (Networker is SteamP2PServer)
                     ((SteamP2PServer)Networker).Send(frame, reliable, skipPlayer);

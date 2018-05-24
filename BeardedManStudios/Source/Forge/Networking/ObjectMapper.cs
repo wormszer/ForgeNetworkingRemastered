@@ -139,7 +139,7 @@ namespace BeardedManStudios.Forge.Networking
 				return stream.GetBasicType<Vector>();
 			else
 				// TODO:  Make this an object mapper exception
-				throw new BaseNetworkException("The type " + type.ToString() + " is not allowed to be sent over the Network (yet)");
+				throw new BaseNetworkException($"The type {type.ToString()} is not allowed to be sent over the Network (yet)");
 		}
 
 		/// <summary>
@@ -346,7 +346,7 @@ namespace BeardedManStudios.Forge.Networking
 			else
 			{
 				// TODO:  Make this a more appropriate exception
-				throw new BaseNetworkException("The type " + type.ToString() + " is not allowed to be sent over the Network (yet)");
+				throw new BaseNetworkException($"The type {type.ToString()} is not allowed to be sent over the Network (yet)");
 			}
 		}
 
@@ -471,7 +471,7 @@ namespace BeardedManStudios.Forge.Networking
 			else
 			{
 				// TODO:  Make this a more appropriate exception
-				throw new BaseNetworkException("The type " + type.ToString() + " is not allowed to be sent over the Network (yet)");
+				throw new BaseNetworkException($"The type {type.ToString()} is not allowed to be sent over the Network (yet)");
 			}
 		}
 

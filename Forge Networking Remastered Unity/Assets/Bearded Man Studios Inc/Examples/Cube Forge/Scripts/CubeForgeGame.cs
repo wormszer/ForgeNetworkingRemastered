@@ -208,13 +208,14 @@ public class CubeForgeGame : CubeForgeGameBehavior
 		if (playerCount == 0)
 			WriteLabel(new Rect(14, 14, 100, 25), "Loading...");
 		else
-			WriteLabel(new Rect(14, 14, 100, 25), "Players: " + playerCount);
+			WriteLabel(new Rect(14, 14, 100, 25), $"Players: {playerCount}");
 
-		WriteLabel(new Rect(14, 28, 100, 25), "Time: " + NetworkManager.Instance.Networker.Time.Timestep);
-		WriteLabel(new Rect(14, 42, 256, 25), "Bandwidth In: " + NetworkManager.Instance.Networker.BandwidthIn);
-		WriteLabel(new Rect(14, 56, 256, 25), "Bandwidth Out: " + NetworkManager.Instance.Networker.BandwidthOut);
-		WriteLabel(new Rect(14, 56, 256, 25), "Round Trip Latency (ms): " + RoundTripLatency);
-	}
+		WriteLabel(new Rect(14, 28, 100, 25), $"Time: {NetworkManager.Instance.Networker.Time.Timestep}");
+		WriteLabel(new Rect(14, 42, 256, 25), $"Bandwidth In: {NetworkManager.Instance.Networker.BandwidthIn}");
+		WriteLabel(new Rect(14, 56, 256, 25), $"Bandwidth Out: {NetworkManager.Instance.Networker.BandwidthOut}");
+		WriteLabel(new Rect(14, 56, 256, 25), $"Round Trip Latency (ms): {RoundTripLatency}");
+
+    }
 
 	/// <summary>
 	/// A helper method to create the currently selected primitive type via RPC

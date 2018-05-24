@@ -120,10 +120,10 @@ namespace BeardedManStudios.Forge.Networking.Unity.Modules
 			if (Socket.IsServer)
 			{
 				((UDPServer)Socket).Connect(hostAddress, port);
-				Socket.playerConnected += (player, sender) => { BMSLog.Log("PLAYER CONNECTED " + player.IPEndPointHandle.Address); };
-				Socket.playerAccepted += (player, sender) => { BMSLog.Log("PLAYER ACCEPTED " + player.IPEndPointHandle.Address); };
-				Socket.playerRejected += (player, sender) => { BMSLog.Log("PLAYER REJECTED " + player.IPEndPointHandle.Address); };
-				Socket.playerDisconnected += (player, sender) => { BMSLog.Log("PLAYER DISCONNECTED " + player.IPEndPointHandle.Address); };
+				Socket.playerConnected += (player, sender) => { BMSLog.Log($"PLAYER CONNECTED {player.IPEndPointHandle.Address}"); };
+				Socket.playerAccepted += (player, sender) => { BMSLog.Log($"PLAYER ACCEPTED {player.IPEndPointHandle.Address}"); };
+				Socket.playerRejected += (player, sender) => { BMSLog.Log($"PLAYER REJECTED {player.IPEndPointHandle.Address}"); };
+				Socket.playerDisconnected += (player, sender) => { BMSLog.Log($"PLAYER DISCONNECTED {player.IPEndPointHandle.Address}"); };
 				StartVOIP(Socket);
 			}
 			else

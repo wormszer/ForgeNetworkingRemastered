@@ -424,7 +424,7 @@ namespace BeardedManStudios
 
 			}
 			else
-				throw new Exception("The type " + type.ToString() + " is not allowed");
+				throw new Exception($"The type {type.ToString()} is not allowed");
 		}
 		/// <summary>
 		/// Used to get the size of a specific type of object, will only be types specified in the type lookup
@@ -458,7 +458,7 @@ namespace BeardedManStudios
 			else if (obj is double)
 				return sizeof(double);
 			else
-				throw new Exception("The type " + obj.GetType().ToString() + " is not allowed");
+				throw new Exception($"The type {obj.GetType().ToString()} is not allowed");
 		}
 
 		/// <summary>
@@ -635,7 +635,7 @@ namespace BeardedManStudios
 #endif
 				return GetBasicType(Enum.GetUnderlyingType(type), start, moveIndex);
 			else
-				throw new Exception("The type " + type.ToString() + " is gettable from basic type, maybe try one of the other getters?");
+				throw new Exception($"The type {type.ToString()} is gettable from basic type, maybe try one of the other getters?");
 		}
 
 		/// <summary>

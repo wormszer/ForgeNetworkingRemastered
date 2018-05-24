@@ -69,7 +69,7 @@ namespace BeardedManStudios.Forge.MVCWebServer
 
             listener = new HttpListener();
 
-            listener.Prefixes.Add("http://*:" + port + "/");
+            listener.Prefixes.Add($"http://*:{port}/ ");
             Plugins = new Dictionary<string, Plugin>();
             Controllers = new Dictionary<string, PageController>();
         }
@@ -201,7 +201,7 @@ namespace BeardedManStudios.Forge.MVCWebServer
 
                 try
                 {
-                    Type controllerType = Type.GetType(GetType().Namespace + ".Controllers." + controllerName);
+                    Type controllerType = Type.GetType($"{GetType().Namespace}.Controllers.{controllerName}");
                     // Find the controller that is to be used to execute page logic
                     controller = Activator.CreateInstance(controllerType, mainNetworker, this)/*.Unwrap()*/ as PageController;
                 }
@@ -239,7 +239,7 @@ namespace BeardedManStudios.Forge.MVCWebServer
                             }
                             catch
                             {
-                                responseString = ((Controllers.Console)controller).Error("The requested command '" + action + "' was not found");
+                                responseString = ((Controllers.Console)controller).Error($"The requested command '{action}' was not found");
                             }
                         }
                         else
@@ -267,13 +267,13 @@ namespace BeardedManStudios.Forge.MVCWebServer
         public static string RenderHTML(PageController controller, string fileName)
         {
             if (!Pages.ContainsKey(fileName))
-                throw new ForgeWebServerException("The file named " + fileName + ".html could not be found");
+                throw new ForgeWebServerException($"The file named {fileName}.html could not be found");
 
             string page = Pages[fileName];
 
             foreach (string key in controller.variables.Keys)
             {
-                Regex rgx = new Regex("<% " + key + " %>");
+                Regex rgx = new Regex($"<% {key} %>");
                 page = rgx.Replace(page, controller.GetVariable(key));
             }
 

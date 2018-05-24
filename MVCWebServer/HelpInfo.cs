@@ -23,14 +23,14 @@ namespace BeardedManStudios.Forge.MVCWebServer
                 response += "<br />Parameters:<ol>";
 
                 foreach (string p in parameterInfo)
-                    response += "<li>" + p + "</li>";
+                    response += "<li>{p}</li>";
 
                 response += "</ol>";
             }
             else
                 response += "<br />";
 
-            response += "Example: <i>" + example + "</i>";
+            response += $"Example: <i>{example}</i>";
 
             return response;
         }

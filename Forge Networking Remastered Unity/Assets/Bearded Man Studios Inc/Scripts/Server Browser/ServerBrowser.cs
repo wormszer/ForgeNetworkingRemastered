@@ -123,7 +123,7 @@ namespace BeardedManStudios.Forge.Networking.Unity
 									}
 									#endif
 									if (socket == null)
-										throw new Exception("No socket of type " + protocol + " could be established");
+										throw new Exception($"No socket of type {protocol} could be established");
 
 									Connected(socket);
 								});
