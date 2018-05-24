@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using BeardedManStudios.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Threading;
 
 namespace UnitTests
 {
@@ -13,15 +13,15 @@ namespace UnitTests
 		/// </summary>
 		/// <param name="condition">The condition that must be true before this function exits (before time runs out)</param>
 		/// <param name="sleep">How long should be slept between each iteration of the loop</param>
-		/// <param name="iterations">The amount of iterations of the loop</param>
+		/// <param name="milliseconds">The amount of iterations of the loop</param>
 		/// <returns></returns>
-		protected static void WaitFor(Func<bool> condition, int iterations = 5000)
+		protected static void WaitFor(Func<bool> condition, int milliseconds = 5000)
 		{
 			int counter = 0;
 			do
 			{
-				Thread.Sleep(1);
-			} while (++counter < iterations && !condition());
+				Task.Sleep(1);
+			} while (++counter < milliseconds && !condition());
 
 			Assert.IsTrue(condition());
 		}
