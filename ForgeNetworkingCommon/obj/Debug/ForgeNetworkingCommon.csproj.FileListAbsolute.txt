@@ -8,3 +8,4 @@ G:\Work\BeardedManStudios\ForgeNetworkingRemastered\ForgeNetworkingCommon\obj\De
 G:\Work\BeardedManStudios\ForgeNetworkingRemastered\ForgeNetworkingCommon\obj\Debug\ForgeNetworkingCommon.pdb
 G:\Work\BeardedManStudios\ForgeNetworkingRemastered\ForgeNetworkingCommon\obj\Debug\ForgeNetworkingCommon.csprojResolveAssemblyReference.cache
 C:\git\ForgeNetworkingRemastered\ForgeNetworkingCommon\obj\Debug\ForgeNetworkingCommon.csprojResolveAssemblyReference.cache
+C:\git\ForgeNetworkingRemastered\ForgeNetworkingCommon\obj\Debug\ForgeNetworkingCommon.csproj.CoreCompileInputs.cache
