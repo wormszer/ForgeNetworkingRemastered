@@ -179,9 +179,22 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 				case ForgeAcceptableFieldTypes.QUATERNION:
 					returnValue = true;
 					break;
-			}
 
-			return returnValue;
+                case ForgeAcceptableFieldTypes.INT:
+                case ForgeAcceptableFieldTypes.UINT:
+                case ForgeAcceptableFieldTypes.BOOL:
+                case ForgeAcceptableFieldTypes.BYTE:
+                case ForgeAcceptableFieldTypes.CHAR:
+                case ForgeAcceptableFieldTypes.DOUBLE:
+                case ForgeAcceptableFieldTypes.LONG:
+                case ForgeAcceptableFieldTypes.ULONG:
+                case ForgeAcceptableFieldTypes.SHORT:
+                case ForgeAcceptableFieldTypes.USHORT:
+                    returnValue = true;
+                    break;
+            }
+
+            return returnValue;
 		}
 
 		public static ForgeAcceptableFieldTypes GetTypeFromAcceptable(string val)

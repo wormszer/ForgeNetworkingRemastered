@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[>:generatedTypes:<]")]
-	[GeneratedRPCVariableNames("{\"types\":[>:generatedHelperTypes:<]")]
 	public abstract partial class >:className:< : INetworkBehavior
 	{
 		>:FOREVERY constRpcs:<
@@ -29,7 +27,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.RegistrationComplete();
 		}
 
-		public void Initialize(NetWorker networker)
+		public void Initialize(NetWorker networker, byte[] metadata = null)
 		{
 			Initialize(new >:networkObject:<(networker));
 		}
@@ -39,6 +37,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// Arguments:
 >:[2]:<
 		/// </summary>
+		[GeneratedRPCAttribute(>:[3]:<, >:[4]:<)]
 		public abstract void >:[0]:<(RpcArgs args);
 		>:ENDFOREVERY:<
 

@@ -83,7 +83,11 @@ namespace BeardedManStudios.Templating
 					string contents = current.Substring(parseStart, parseEnd - parseStart);
 
 					sb.Remove(parseStart - 2, parseEnd - parseStart + 4);
-
+                    if(contents.Contains("rpcs"))
+                    {
+                        System.Diagnostics.Debugger.Break();
+                    }
+                      
 					if (CheckState(contents, ref foundState))
 					{
 						skipLine = true;
@@ -121,10 +125,13 @@ namespace BeardedManStudios.Templating
 
 				string built = sb.ToString();
 
-				if (parsed && built.Trim().Length == 0)
-					lines.RemoveAt(i--);
-				else if (!skipLine && !emptyArray)
-					finalLines.Add(built);
+                if (parsed && built.Trim().Length == 0)
+                {
+                    //why would need to remove the template line if it returned empty one time??
+                    //lines.RemoveAt(i--);
+                }
+                else if (!skipLine && !emptyArray)
+                    finalLines.Add(built);
 			}
 
 			return string.Join(Environment.NewLine, finalLines.ToArray());
