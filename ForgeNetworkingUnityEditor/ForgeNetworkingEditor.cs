@@ -813,7 +813,6 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 
                 StringBuilder innerTypes = new StringBuilder();
 				StringBuilder helperNames = new StringBuilder();
-				StringBuilder xmlparams = new StringBuilder();
 				StringBuilder innerJSON = new StringBuilder();
 				StringBuilder innerHelperTypesJSON = new StringBuilder();
                 helperNames.AppendFormat("\t\t/// {0}(", btn.RPCVariables[i].FieldName);

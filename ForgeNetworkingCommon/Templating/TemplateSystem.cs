@@ -83,11 +83,7 @@ namespace BeardedManStudios.Templating
 					string contents = current.Substring(parseStart, parseEnd - parseStart);
 
 					sb.Remove(parseStart - 2, parseEnd - parseStart + 4);
-                    if(contents.Contains("rpcs"))
-                    {
-                        System.Diagnostics.Debugger.Break();
-                    }
-                      
+
 					if (CheckState(contents, ref foundState))
 					{
 						skipLine = true;
