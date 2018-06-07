@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forge Networking Remastered Unity", "Forge Networking Remastered Unity.csproj", "{7101BF79-1CBC-B118-A920-3B09B7453F1D}"
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forge Networking Remastered Unity", "Assembly-CSharp.csproj", "{1FE37288-1472-EDD4-D37D-44727C886F0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forge Networking Remastered Unity", "Assembly-CSharp-firstpass.csproj", "{B332891E-6AD3-4FE1-CFA9-FC403A77E0EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +11,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7101BF79-1CBC-B118-A920-3B09B7453F1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7101BF79-1CBC-B118-A920-3B09B7453F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7101BF79-1CBC-B118-A920-3B09B7453F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7101BF79-1CBC-B118-A920-3B09B7453F1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE37288-1472-EDD4-D37D-44727C886F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE37288-1472-EDD4-D37D-44727C886F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE37288-1472-EDD4-D37D-44727C886F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE37288-1472-EDD4-D37D-44727C886F0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B332891E-6AD3-4FE1-CFA9-FC403A77E0EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B332891E-6AD3-4FE1-CFA9-FC403A77E0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B332891E-6AD3-4FE1-CFA9-FC403A77E0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B332891E-6AD3-4FE1-CFA9-FC403A77E0EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

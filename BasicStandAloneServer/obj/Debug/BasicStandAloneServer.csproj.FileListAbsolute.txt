@@ -7,3 +7,14 @@ C:\git\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAlone
 C:\git\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAloneServer.exe
 C:\git\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAloneServer.pdb
 C:\git\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAloneServer.csproj.CoreCompileInputs.cache
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\bin\Debug\BasicStandAloneServer.exe.config
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\bin\Debug\BasicStandAloneServer.exe
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\bin\Debug\BasicStandAloneServer.pdb
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\bin\Debug\BeardedManStudios.dll
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\bin\Debug\Steamworks.NET.dll
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\bin\Debug\BeardedManStudios.pdb
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAloneServer.csprojAssemblyReference.cache
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAloneServer.csproj.CoreCompileInputs.cache
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAloneServer.csproj.CopyComplete
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAloneServer.exe
+D:\Projects\Games\ForgeNetworkingRemastered\BasicStandAloneServer\obj\Debug\BasicStandAloneServer.pdb
