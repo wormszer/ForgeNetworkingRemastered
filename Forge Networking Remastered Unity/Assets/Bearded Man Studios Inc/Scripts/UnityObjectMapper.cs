@@ -26,7 +26,7 @@ namespace BeardedManStudios.Forge.Networking.Unity
 {
 	public class UnityObjectMapper : ObjectMapper
 	{
-		private float x, y, z, w;
+		//private float x, y, z, w;
 
 		private new static UnityObjectMapper instance = null;
 		public static new UnityObjectMapper Instance
@@ -217,10 +217,10 @@ namespace BeardedManStudios.Forge.Networking.Unity
 		/// <returns>A type of Vector4 (Vector4/Color/Quaternion) out of the FrameStream</returns>
 		public object MapVector4(Type type, BMSByte stream)
 		{
-			x = stream.GetBasicType<float>();
-			y = stream.GetBasicType<float>();
-			z = stream.GetBasicType<float>();
-			w = stream.GetBasicType<float>();
+			float x = stream.GetBasicType<float>();
+			float y = stream.GetBasicType<float>();
+			float z = stream.GetBasicType<float>();
+            float w = stream.GetBasicType<float>();
 
 			if (type == typeof(Color))
 				return new Color(x, y, z, w);

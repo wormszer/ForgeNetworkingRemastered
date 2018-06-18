@@ -44,8 +44,6 @@ namespace BeardedManStudios.Forge.Networking
 
 		protected ObjectMapper() { }
 
-		protected int byteArrSize, size = 0;
-
 		public void UseAsDefault() { instance = this; }
 
 		/// <summary>
@@ -215,7 +213,7 @@ namespace BeardedManStudios.Forge.Networking
 		/// <returns>A BMSByte that was read from the BMSByte</returns>
 		public object MapBMSByte(BMSByte stream)
 		{
-			size = Map<int>(stream);
+			int size = Map<int>(stream);
 			return new BMSByte().Clone(Map<byte[]>(stream));
 		}
 
