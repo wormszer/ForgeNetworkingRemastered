@@ -34,5 +34,10 @@ namespace BeardedManStudios.Forge.Networking
 			current = BeardedMath.Lerp(current, target, LerpT);
 			return current;
 		}
+
+        public static T Interpolate(T from, T to, float t)
+        {
+            return BeardedMath.Lerp(from, to, t);
+        }
 	}
 }

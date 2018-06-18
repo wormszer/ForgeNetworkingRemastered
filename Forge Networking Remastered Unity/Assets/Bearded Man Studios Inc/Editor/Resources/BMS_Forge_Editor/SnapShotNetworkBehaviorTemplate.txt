@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	public abstract partial class >:className:< : NetworkBehavior
+	[GeneratedSnapshot()]
+	public abstract partial class >:className:< : NetworkBehavior, IRewindable
 	{
 		>:FOREACH constRpcs:<
 		public const byte RPC_>:[0]:< = >:[idx]:< + 5;
@@ -106,7 +107,22 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		[GeneratedRPC(>:[3]:<, >:[4]:<)]
 		public abstract void >:[0]:<(RpcArgs args);
 		>:ENDFOREVERY:<
+	        
+        public void StartRewind()
+        {
+			networkObject.StartRewind();
+        }
+		
+        public void RewindTo(ulong timestep)
+        {
+			networkObject.RewindTo(timestep);
+        }
 
+        public void FinishRewind()
+        {
+			networkObject.FinishRewind();
+        }
+		
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}
 }

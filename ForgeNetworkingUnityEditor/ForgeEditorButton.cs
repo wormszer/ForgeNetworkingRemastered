@@ -244,7 +244,18 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 				GUILayout.Label("Fields", EditorStyles.boldLabel);
 				EditorStyles.boldLabel.alignment = TextAnchor.MiddleCenter;
 
-				_classOrderList.DoLayoutList();
+                _classOrderList.DoLayoutList();
+
+                EditorGUI.BeginChangeCheck();
+                TiedObject.IsSnapshot = EditorGUILayout.Toggle("Use Snapshot", TiedObject.IsSnapshot);
+                if (EditorGUI.EndChangeCheck())
+                {
+					//need to  update the snapshot status
+                    foreach (var cv in ClassVariables)
+                    {
+                        cv.Snapshot = TiedObject.IsSnapshot;
+                    }
+                }
 
 				//Do we still need this?
 				Rect addFieldBtn = EditorGUILayout.BeginVertical("Button", GUILayout.Width(75), GUILayout.Height(25));
@@ -422,8 +433,9 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 			{
 				bool canInterpolate = TiedObject.Fields[i].Interpolate;
 				float interpolateValue = TiedObject.Fields[i].InterpolateValue;
+                bool canSnapshot = TiedObject.IsSnapshot;
 
-				ClassVariables.Add(new ForgeEditorField(TiedObject.Fields[i].FieldName, true, TiedObject.Fields[i].FieldType, canInterpolate, interpolateValue));
+				ClassVariables.Add(new ForgeEditorField(TiedObject.Fields[i].FieldName, true, TiedObject.Fields[i].FieldType, canInterpolate, interpolateValue, canSnapshot));
 			}
 
 			if (TiedObject != null)

@@ -45,8 +45,9 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 		public List<ForgeClassFieldValue> Fields = new List<ForgeClassFieldValue>();
 		public List<ForgeClassRPCValue> RPCS = new List<ForgeClassRPCValue>();
 		public List<ForgeClassRewindValue> Rewinds = new List<ForgeClassRewindValue>();
+        public bool IsSnapshot = false;
 
-		public ForgeClassObject(string location)
+        public ForgeClassObject(string location)
 		{
 			this.FileLocation = location;
 			this.Filename = Path.GetFileName(FileLocation);
@@ -63,21 +64,35 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 			GeneratedRPCAttribute aRPC = (GeneratedRPCAttribute)Attribute.GetCustomAttribute(currentType, typeof(GeneratedRPCAttribute));
 			GeneratedRPCVariableNamesAttribute aNames = (GeneratedRPCVariableNamesAttribute)Attribute.GetCustomAttribute(currentType, typeof(GeneratedRPCVariableNamesAttribute));
 			GeneratedInterpolAttribute aInterpol = (GeneratedInterpolAttribute)Attribute.GetCustomAttribute(currentType, typeof(GeneratedInterpolAttribute));
+            GeneratedSnapshotAttribute aSnapshot = (GeneratedSnapshotAttribute)Attribute.GetCustomAttribute(currentType, typeof(GeneratedSnapshotAttribute));
 
-			if (aRPC != null && !string.IsNullOrEmpty(aRPC.JsonData))
-				typeData = JSON.Parse(aRPC.JsonData);
-			else
-				typeData = new JSONClass();
+            IsSnapshot = aSnapshot != null;
+
+            bool OldInterpSystem = false;
+            bool OldRPCSystem = false;
+
+            if (aRPC != null && !string.IsNullOrEmpty(aRPC.JsonData))
+            {
+                typeData = JSON.Parse(aRPC.JsonData);
+                OldRPCSystem = true;
+            }
+            else
+                typeData = new JSONClass();
 
 			if (aNames != null && !string.IsNullOrEmpty(aNames.JsonData))
 				typeHelperData = JSON.Parse(aNames.JsonData);
 			else
 				typeHelperData = new JSONClass();
 
-			if (aInterpol != null && !string.IsNullOrEmpty(aInterpol.JsonData))
-				interpolData = JSON.Parse(aInterpol.JsonData);
-			else
-				interpolData = new JSONClass();
+            if (aInterpol != null && !string.IsNullOrEmpty(aInterpol.JsonData))
+            {
+                interpolData = JSON.Parse(aInterpol.JsonData);
+                OldInterpSystem = true;
+            }
+            else
+            {
+                interpolData = new JSONClass();
+            }
 
 #if FORGE_EDITOR_DEBUGGING
 			string forgeClassDebug = "Loaded - " + this.ExactFilename + System.Environment.NewLine;
@@ -153,7 +168,7 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 					}
 				}
 
-				for (int i = 0; i < baseProperties.Length; ++i)
+                for (int i = 0; i < baseProperties.Length; ++i)
 				{
 					for (int x = 0; x < uniqueProperties.Count; ++x)
 					{
@@ -176,10 +191,15 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 						}
 					}
 				}
-			}
+            }
 
-			#region IGNORES
-			for (int i = 0; i < uniqueFields.Count; ++i)
+#region IGNORES
+
+            //this whole area is a bit hacky (most of this is to account for if you create another partial class, everything get mixed together)
+            //it is basically trying to remove any fields or properties that were not generated
+			//the code now uses attributes on specific fields and methods, this is left here for legacy imports
+
+            for (int i = 0; i < uniqueFields.Count; ++i)
 			{
 				switch (uniqueFields[i].Name)
 				{
@@ -206,9 +226,19 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 					//TODO: Store the types for re-use
 					continue;
 				}
-			}
 
-			for (int i = 0; i < uniqueMethods.Count; ++i)
+                //look for properties that are internally generated {get;set;} remove these backing fields
+                for (int x = 0; x < uniqueProperties.Count; ++x)
+                {
+                    if (uniqueFields[i].Name.Contains(string.Format("<{0}>", uniqueProperties[x].Name)))
+                    {
+                        uniqueFields.RemoveAt(i--);
+                        continue;
+                    }
+                }
+            }
+
+            for (int i = 0; i < uniqueMethods.Count; ++i)
 			{
 				switch (uniqueMethods[i].Name.ToLower())
 				{
@@ -231,7 +261,32 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 					continue;
 				}
 			}
-			#endregion
+            #endregion
+            if (!OldInterpSystem)
+            {   
+                //if the old system is detected we do not want to remove all the fields with no attributes
+                for (int i = 0; i < uniqueFields.Count; ++i)
+                {
+                    var ncwfield = uniqueFields[i].GetCustomAttribute<GeneratedNetworkFieldAttribute>();
+                    if (ncwfield == null)
+                    {
+                        uniqueFields.RemoveAt(i--);
+                    }
+                }
+            }
+
+            if (!OldRPCSystem)
+            {
+                //if the old system is detected we do not want to remove all the methods with no attributes
+                for (int i = 0; i < uniqueMethods.Count; ++i)
+                {
+                    var rpcattrib = uniqueMethods[i].GetCustomAttribute<GeneratedRPCAttribute>();
+                    if (rpcattrib == null)
+                    {
+                        uniqueMethods.RemoveAt(i--);
+                    }
+                }
+            }
 
 #if FORGE_EDITOR_DEBUGGING
 			forgeClassDebug += "Properties:\n";
@@ -243,7 +298,7 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 
 			forgeClassDebug += "Fields:\n";
 #endif
-			if (ObjectClassType != ForgeBaseClassType.Enums)
+            if (ObjectClassType != ForgeBaseClassType.Enums)
 			{
 				if (interpolData != null)
 				{
@@ -265,16 +320,28 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 
 				for (int i = 0; i < uniqueFields.Count; ++i)
 				{
-					if (_interpolationValues.Count == 0)
-						break;
+                    var ncwfield = uniqueFields[i].GetCustomAttribute<GeneratedNetworkFieldAttribute>();
+                    if (ncwfield != null)
+                    {
+                        float interopVal = ncwfield.InterpolationValue;
+                        bool interop = interopVal > 0.0f;
 
-					ForgeClassFieldValue val = ForgeClassFieldValue.GetClassField(uniqueFields[i], currentType, _interpolationValues[i] > 0, _interpolationValues[i]);
-					Fields.Add(val);
+                        ForgeClassFieldValue val = ForgeClassFieldValue.GetClassField(uniqueFields[i], currentType, interop, interopVal, IsSnapshot);
+                        Fields.Add(val);
+                    }
+                    else
+                    {
+                        if (_interpolationValues.Count == 0)
+                        	break;
+
+						ForgeClassFieldValue val = ForgeClassFieldValue.GetClassField(uniqueFields[i], currentType, _interpolationValues[i] > 0, _interpolationValues[i]);
+                        Fields.Add(val);
+                    }
 #if FORGE_EDITOR_DEBUGGING
 					Debug.Log(val);
 					forgeClassDebug += uniqueFields[i].Name + " (" + uniqueFields[i].FieldType + ")" + System.Environment.NewLine;
 #endif
-				}
+                }
 			}
 #if FORGE_EDITOR_DEBUGGING
 			forgeClassDebug += System.Environment.NewLine;
@@ -342,7 +409,23 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 
 			for (int i = 0; i < uniqueMethods.Count; ++i)
 			{
-				RPCS.Add(new ForgeClassRPCValue(uniqueMethods[i], rpcSupportedTypes[i], typeHelpers[i]));
+                var rpcattrib = uniqueMethods[i].GetCustomAttribute<GeneratedRPCAttribute>();
+                if (rpcattrib != null)
+                {
+                    List<ForgeAcceptableRPCTypes> singularSupportedTypes = new List<ForgeAcceptableRPCTypes>();
+                    for (int x = 0; x < rpcattrib.Types.Length; ++x)
+                    {
+                        ForgeAcceptableRPCTypes singularType = ForgeClassFieldRPCValue.GetTypeFromAcceptable(rpcattrib.Types[x]);
+                        singularSupportedTypes.Add(singularType);
+                    }
+
+                    RPCS.Add(new ForgeClassRPCValue(uniqueMethods[i], singularSupportedTypes, rpcattrib.Names.ToList()));
+                }
+                else
+                {
+                    RPCS.Add(new ForgeClassRPCValue(uniqueMethods[i], rpcSupportedTypes[i], typeHelpers[i]));
+                }
+
 #if FORGE_EDITOR_DEBUGGING
 				ParameterInfo[] paramsInfo = a.GetParameters();
 				string parameters = "";

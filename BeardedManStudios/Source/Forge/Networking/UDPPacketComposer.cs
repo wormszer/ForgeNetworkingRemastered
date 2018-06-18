@@ -25,38 +25,40 @@ using System.Threading;
 
 namespace BeardedManStudios.Forge.Networking
 {
-	public class UDPPacketComposer : BasePacketComposer
+    public class UDPPacketComposer : BasePacketComposer
     {
-		/// <summary>
-		/// A base for any composer based events
-		/// </summary>
-		/// <param name="composer">The composer that fired off the event</param>
-		public delegate void ComposerEvent(UDPPacketComposer composer);
+        /// <summary>
+        /// A base for any composer based events
+        /// </summary>
+        /// <param name="composer">The composer that fired off the event</param>
+        public delegate void ComposerEvent(UDPPacketComposer composer);
 
-		/// <summary>
-		/// Occurs when this composer has completed all of its messaging tasks
-		/// </summary>
-		public event ComposerEvent completed;
+        /// <summary>
+        /// Occurs when this composer has completed all of its messaging tasks
+        /// </summary>
+        public event ComposerEvent completed;
 
-		/// <summary>
-		/// The maximum size allowed for each packet
-		/// </summary>
-		public const ushort PACKET_SIZE = 1200;
+        /// <summary>
+        /// The maximum size allowed for each packet
+        /// </summary>
+        public const ushort PACKET_SIZE = 1200;
 
-		/// <summary>
-		/// A reference to the client worker that this composer belongs to
-		/// </summary>
-		public BaseUDP ClientWorker { get; private set; }
+        /// <summary>
+        /// A reference to the client worker that this composer belongs to
+        /// </summary>
+        public BaseUDP ClientWorker { get; private set; }
 
-		/// <summary>
-		/// The target player in question that will be receiving this data
-		/// </summary>
-		public NetworkingPlayer Player { get; private set; }
+        /// <summary>
+        /// The target player in question that will be receiving this data
+        /// </summary>
+        public NetworkingPlayer Player { get; private set; }
 
-		/// <summary>
-		/// If this message is reliable so that the object knows if it needs to attempt to resend packets
-		/// </summary>
-		public bool Reliable { get; private set; }
+        /// <summary>
+        /// If this message is reliable so that the object knows if it needs to attempt to resend packets
+        /// </summary>
+        public bool Reliable { get; private set; }
+
+        public ulong TimeCreated { get; private set; }
 
 		/// <summary>
 		/// The list of packets that are to be resent if it is reliable, otherwise it is just the
@@ -106,7 +108,9 @@ namespace BeardedManStudios.Forge.Networking
 				// when each of the packets have been confirmed by the recipient
 				ClientWorker.messageConfirmed += MessageConfirmed;
 
-				Player.QueueComposer(this);
+                TimeCreated = Player.Networker.Time.Timestep;
+
+                Player.QueueComposer(this);
 			}
 			else
 			{
@@ -260,7 +264,8 @@ namespace BeardedManStudios.Forge.Networking
 				if (!PendingPackets.TryGetValue(packet.orderId, out foundPacket))
 					return;
 
-				player.RoundTripLatency = (int)(player.Networker.Time.Timestep - foundPacket.LastSentTimestep);
+				//player.RoundTripLatency = (int)(player.Networker.Time.Timestep - foundPacket.LastSentTimestep);
+				player.RoundTripLatency = (int)(player.Networker.Time.Timestep - TimeCreated);
 
 				// Remove the packet from pending so that it isn't sent again
 				PendingPackets.Remove(packet.orderId);

@@ -3,6 +3,7 @@
 namespace BeardedManStudios.Forge.Networking.Generated
 {
     [AttributeUsage(AttributeTargets.All)]
+    [System.Diagnostics.Conditional("UNITY_EDITOR")] //not needed at runtime do not include in build
     public class GeneratedInterpolAttribute : System.Attribute
     {
         public readonly string JsonData;

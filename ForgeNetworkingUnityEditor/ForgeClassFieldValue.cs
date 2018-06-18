@@ -17,6 +17,7 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 		public bool Interpolate;
 		public float InterpolateValue;
 		public ForgeAcceptableFieldTypes FieldType;
+		public bool Snapshot;
 		public bool IsNetworkedObject { get { return FieldName.ToLower() == "networkobject"; } }
 
 		public ForgeClassFieldValue()
@@ -26,18 +27,20 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 			Interpolate = false;
 			InterpolateValue = 0;
 			FieldType = ForgeAcceptableFieldTypes.BYTE;
+            Snapshot = false;
 		}
 
-		public ForgeClassFieldValue(string name, object value, ForgeAcceptableFieldTypes type, bool interpolate, float interpolateValue)
+		public ForgeClassFieldValue(string name, object value, ForgeAcceptableFieldTypes type, bool interpolate, float interpolateValue, bool snapshot = false)
 		{
 			this.FieldName = name;
 			this.FieldValue = value;
 			this.FieldType = type;
 			this.Interpolate = interpolate;
 			this.InterpolateValue = interpolateValue;
+			this.Snapshot = snapshot;
 		}
 
-		public static ForgeClassFieldValue GetClassField(FieldInfo field, Type t, bool interpolate, float interpolateValue)
+		public static ForgeClassFieldValue GetClassField(FieldInfo field, Type t, bool interpolate, float interpolateValue, bool snapshot = false)
 		{
 			string name = field.Name.Replace("_", string.Empty);
 			object value = null;
@@ -87,7 +90,7 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 			//else
 			//	type = ForgeAcceptableFieldTypes.Unknown; //Unsupported
 
-			return new ForgeClassFieldValue(name, value, type, interpolate, interpolateValue);
+			return new ForgeClassFieldValue(name, value, type, interpolate, interpolateValue, snapshot);
 		}
 
 		public static Type GetTypeFromAcceptable(ForgeAcceptableFieldTypes type)
@@ -179,9 +182,22 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 				case ForgeAcceptableFieldTypes.QUATERNION:
 					returnValue = true;
 					break;
-			}
 
-			return returnValue;
+                case ForgeAcceptableFieldTypes.INT:
+                case ForgeAcceptableFieldTypes.UINT:
+                case ForgeAcceptableFieldTypes.BOOL:
+                case ForgeAcceptableFieldTypes.BYTE:
+                case ForgeAcceptableFieldTypes.CHAR:
+                case ForgeAcceptableFieldTypes.DOUBLE:
+                case ForgeAcceptableFieldTypes.LONG:
+                case ForgeAcceptableFieldTypes.ULONG:
+                case ForgeAcceptableFieldTypes.SHORT:
+                case ForgeAcceptableFieldTypes.USHORT:
+                    returnValue = true;
+                    break;
+            }
+
+            return returnValue;
 		}
 
 		public static ForgeAcceptableFieldTypes GetTypeFromAcceptable(string val)

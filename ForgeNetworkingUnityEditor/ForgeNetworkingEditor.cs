@@ -720,7 +720,9 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 		/// <returns>The generated string to save to a file</returns>
 		public string SourceCodeNetworkObject(ForgeClassObject cObj, ForgeEditorButton btn, int identity)
 		{
-			TextAsset asset = Resources.Load<TextAsset>(EDITOR_RESOURCES_DIR + "/NetworkObjectTemplate");
+            bool issnapshot = btn.ClassVariables.Find(x => x.Snapshot) != null;
+
+            TextAsset asset = Resources.Load<TextAsset>(EDITOR_RESOURCES_DIR + (issnapshot ? "/SnapShotNetworkObjectTemplate" : "/NetworkObjectTemplate"));
 			TemplateSystem template = new TemplateSystem(asset.text);
 
 			template.AddVariable("className", btn.StrippedSearchName + "NetworkObject");
@@ -789,10 +791,20 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 		{
 			string behaviorPath = string.Empty;
 
-			if (btn.BaseType == ForgeBaseClassType.NetworkBehavior)
+            bool issnapshot = false;
+            var networkobject = _editorButtons.Find(x => x.IsNetworkObject && x.StrippedSearchName == btn.StrippedSearchName);
+            if (networkobject != null)
+            {
+                if (networkobject.ClassVariables != null && networkobject.ClassVariables.Count > 0)
+                {
+                    issnapshot = networkobject.ClassVariables.Find(x => x.Snapshot) != null;
+                }
+            }
+
+            if (btn.BaseType == ForgeBaseClassType.NetworkBehavior)
 				behaviorPath = EDITOR_RESOURCES_DIR + "/StandAloneNetworkBehaviorTemplate";
 			else
-				behaviorPath = EDITOR_RESOURCES_DIR + "/NetworkBehaviorTemplate";
+				behaviorPath = EDITOR_RESOURCES_DIR + (issnapshot ? "/SnapShotNetworkBehaviorTemplate" : "/NetworkBehaviorTemplate");
 
 			TextAsset asset = Resources.Load<TextAsset>(behaviorPath);
 			TemplateSystem template = new TemplateSystem(asset.text);
@@ -808,15 +820,20 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 
 			for (int i = 0; i < btn.RPCVariables.Count; ++i)
 			{
-				StringBuilder innerTypes = new StringBuilder();
+                StringBuilder paramnames = new StringBuilder("new string[]{");
+                StringBuilder paramtypes = new StringBuilder("new string[]{");
+
+                StringBuilder innerTypes = new StringBuilder();
 				StringBuilder helperNames = new StringBuilder();
 				StringBuilder innerJSON = new StringBuilder();
 				StringBuilder innerHelperTypesJSON = new StringBuilder();
-				for (int x = 0; x < btn.RPCVariables[i].ArgumentCount; ++x)
+                helperNames.AppendFormat("\t\t/// {0}(", btn.RPCVariables[i].FieldName);
+
+                for (int x = 0; x < btn.RPCVariables[i].ArgumentCount; ++x)
 				{
 					Type t = ForgeClassFieldRPCValue.GetTypeFromAcceptable(btn.RPCVariables[i].FieldTypes[x].Type);
 
-					helperNames.AppendLine("\t\t/// " + _referenceVariables[t.Name] + " " + btn.RPCVariables[i].FieldTypes[x].HelperName);
+					helperNames.Append(_referenceVariables[t.Name] + " " + btn.RPCVariables[i].FieldTypes[x].HelperName);
 
 					string fieldHelper = btn.RPCVariables[i].FieldTypes[x].HelperName;
 					if (x + 1 < btn.RPCVariables[i].ArgumentCount)
@@ -824,22 +841,35 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 						innerTypes.Append(", typeof(" + _referenceVariables[t.Name] + ")");
 						innerJSON.Append("\"" + _referenceVariables[t.Name] + "\", ");
 						innerHelperTypesJSON.Append("\"" + fieldHelper + "\", ");
-
-					}
+                        paramnames.AppendFormat("\"{0}\", ", btn.RPCVariables[i].FieldTypes[x].HelperName);
+                        paramtypes.AppendFormat("\"{0}\", ", _referenceVariables[t.Name]);
+                        helperNames.Append(", ");
+                    }
 					else
 					{
 						innerTypes.Append(", typeof(" + _referenceVariables[t.Name] + ")");
 						innerJSON.Append("\"" + _referenceVariables[t.Name] + "\"");
 						innerHelperTypesJSON.Append("\"" + fieldHelper + "\"");
-					}
-				}
+                        paramnames.AppendFormat("\"{0}\"}}", btn.RPCVariables[i].FieldTypes[x].HelperName);
+                        paramtypes.AppendFormat("\"{0}\"}}", _referenceVariables[t.Name]);
+                    }
+                }
+                helperNames.AppendLine(")");
 
-				object[] rpcData = new object[]
+                if (btn.RPCVariables[i].ArgumentCount == 0)
+                {
+                    paramnames.AppendFormat("}}");
+                    paramtypes.AppendFormat("}}");
+                }
+
+                object[] rpcData = new object[]
 				{
 					btn.RPCVariables[i].FieldName,				// The function name
 					innerTypes.ToString(),						// The list of types
-					helperNames.ToString().TrimEnd()
-				};
+					helperNames.ToString().TrimEnd(),
+                    paramnames.ToString(),
+                    paramtypes.ToString(),
+                };
 
 				string constRpc = "";
 				for (int j = 0; j < btn.RPCVariables[i].FieldName.Length; j++)
@@ -873,7 +903,7 @@ namespace BeardedManStudios.Forge.Networking.UnityEditor
 			template.AddVariable("rpcs", rpcs.ToArray());
 			template.AddVariable("constRpcs", constRpcs.ToArray());
 
-			return template.Parse();
+            return template.Parse();
 		}
 
 		/// <summary>

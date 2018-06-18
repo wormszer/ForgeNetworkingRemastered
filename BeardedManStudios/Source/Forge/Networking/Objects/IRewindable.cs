@@ -19,25 +19,11 @@
 
 namespace BeardedManStudios.Forge.Networking
 {
-	public struct InterpolateDouble : IInterpolator<double>
+	public interface IRewindable
 	{
-		public double current;
-		public double target;
-		public float LerpT { get; set; }
-		public bool Enabled { get; set; }
-		public ulong Timestep { get; set; }
+        void StartRewind();
+        void RewindTo(ulong timestep);
+        void FinishRewind();
 
-		public double Interpolate()
-		{
-			if (!Enabled) return target;
-
-			current = (float)BeardedMath.Lerp(current, target, LerpT);
-			return current;
-		}
-
-        public static double Interpolate(double from, double to, float t)
-        {
-            return BeardedMath.Lerp(from, to, t);
-        }
     }
 }
